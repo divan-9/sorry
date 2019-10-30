@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Sorry.Analyzers
+﻿namespace Sorry.Analyzers
 {
     public class Class1
     {
