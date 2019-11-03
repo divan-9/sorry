@@ -1,10 +1,7 @@
 language: csharp
 mono: none
 dotnet: 2.2
-jobs:
-  include:
-    - stage: test
-      script: echo 'test's
-    - stage: nuget-push
-      script: echo 'nuget push'
-      if: "$TRAVIS_TAG =~ ^\d+.\d+.\d+.*"
+
+script:
+  - dotnet test
+  - ./nuget-push.sh
