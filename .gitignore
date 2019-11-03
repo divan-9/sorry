@@ -329,4 +329,5 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 .lcov
-nuget.config
+_packages
+_packagesSource

@@ -1,11 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <PackageTargetFallback>portable-net45+win8+wp8+wpa81</PackageTargetFallback>
   </PropertyGroup>
 
   <PropertyGroup>
     <RepositoryUrl>https://github.com/divan-9/sorry</RepositoryUrl>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -17,14 +20,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CSharpGuidelinesAnalyzer" Version="3.2.0">
-    </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" ExcludeAssets="analyzers">
-    </PackageReference>
-    <PackageReference Include="ConfigureAwaitChecker.Analyzer" Version="4.0.0">
-    </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.0.0.9566">
-    </PackageReference>
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    <None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="tools" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.2.*" PrivateAssets="all"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CSharpGuidelinesAnalyzer" Version="3.2.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118"/>
+    <PackageReference Include="ConfigureAwaitChecker.Analyzer" Version="4.0.0"/>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.0.0.9566"/>
   </ItemGroup>
 
 </Project>

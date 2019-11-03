@@ -11,4 +11,9 @@
     
     </Rules>
 
+    <Rules AnalyzerId="CSharpGuidelinesAnalyzer" RuleNamespace="CSharpGuidelinesAnalyzer">
+        <Rule Id="AV2210" Action="None" />
+        <Rule Id="AV1555" Action="None" />
+    </Rules>
+
 </RuleSet>
