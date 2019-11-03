@@ -1,7 +1,6 @@
 language: csharp
-mono: none
 dotnet: 2.2
+mono: none
 
 script:
-  - dotnet test
-  - ./nuget-push.sh
+  - dotnet test && ./nuget-push.sh
