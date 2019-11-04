@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class Class1
+    public class Sorry1000
     {
         public void Method(string arg1)
         {
