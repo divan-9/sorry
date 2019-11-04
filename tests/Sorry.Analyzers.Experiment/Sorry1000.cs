@@ -27,5 +27,10 @@
         {
             throw new NotImplementedException();
         }
+
+        public void Method5()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

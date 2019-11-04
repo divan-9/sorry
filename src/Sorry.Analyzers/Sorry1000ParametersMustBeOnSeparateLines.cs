@@ -54,6 +54,12 @@
             }
 
             SeparatedSyntaxList<ParameterSyntax> parameters = parameterList.Parameters;
+
+            if (parameters.Count == 0)
+            {
+                return;
+            }
+
             Analyze(
                 context: context,
                 parameters: parameters,

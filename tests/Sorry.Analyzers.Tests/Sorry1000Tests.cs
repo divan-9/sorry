@@ -57,6 +57,21 @@
             this.NoDiagnostic(code, DiagnosticIds.Sorry1000);
         }
 
+        [Fact]
+        public void DoesNotWarnEmptyArgumentList()
+        {
+            const string code = @"
+                class A
+                {
+                    void Method()
+                    {
+                    }
+                }
+            ";
+
+            this.NoDiagnostic(code, "AD0001");
+        }
+
         protected override DiagnosticAnalyzer CreateAnalyzer()
         {
             return new Sorry1000ParametersMustBeOnSeparateLines();
