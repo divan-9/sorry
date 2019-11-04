@@ -10,7 +10,7 @@
     internal class Sorry1000ParametersMustBeOnSeparateLines : DiagnosticAnalyzer
     {
         private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
-            id: "SORRY1000",
+            id: DiagnosticIds.Sorry1000,
             title: "Parameters must be on separate lines",
             messageFormat: "Parameters must be on separate lines",
             category: "Readability Rules",

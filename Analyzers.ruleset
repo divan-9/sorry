@@ -4,11 +4,13 @@
     Description=""
     ToolsVersion="14.0">
 
-    <Rules AnalyzerId="SonarAnalyzer.CSharp" RuleNamespace="SonarAnalyzer.CSharp">
-        
-        <Rule Id="SA0001" Action="None" />
+    <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
         <Rule Id="SA1633" Action="None" />
-    
+        <Rule Id="S2699" Action="None"/>
+    </Rules>
+
+    <Rules AnalyzerId="SonarAnalyzer.CSharp" RuleNamespace="SonarAnalyzer.CSharp">
+        <Rule Id="SA0001" Action="None" />
     </Rules>
 
     <Rules AnalyzerId="CSharpGuidelinesAnalyzer" RuleNamespace="CSharpGuidelinesAnalyzer">
