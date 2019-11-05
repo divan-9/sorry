@@ -46,7 +46,7 @@ namespace Sorry.Analyzers.Tests
             }
             ";
 
-            var document = GetDocumentFromCode(code, "/Y/TestDocument");
+            var document = GetDocumentFromCode(code, "/X/TestDocument");
             this.NoDiagnostic(document, DiagnosticIds.Sorry2000);
         }
 
