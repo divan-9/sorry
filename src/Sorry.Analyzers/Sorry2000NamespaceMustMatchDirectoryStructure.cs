@@ -58,12 +58,12 @@
             string fileDirectory,
             int namespaceSegmentsNumber)
         {
-            var expectedSegments = fileDirectory
+            var pathSegments = fileDirectory
                 .Replace(Path.DirectorySeparatorChar, '.')
                 .Split('.');
 
-            var valuableSegments = expectedSegments
-                .Skip(expectedSegments.Length - namespaceSegmentsNumber);
+            var valuableSegments = pathSegments
+                .Skip(pathSegments.Length - namespaceSegmentsNumber);
 
             return string.Join(".", valuableSegments);
         }
