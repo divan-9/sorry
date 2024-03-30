@@ -168,6 +168,42 @@ public class Foo
 }
 ",
             };
+            yield return new object[]
+            {
+                @"
+namespace Tests;
+
+using NUnit.Framework;
+
+public class Foo
+{
+    public void MyTestMethod(int foo)
+    {
+        if (true)
+        {
+        }
+    }
+}
+",
+            };
+            yield return new object[]
+            {
+                @"
+namespace Tests;
+
+using NUnit.Framework;
+
+public class Foo
+{
+    public void MyTestMethod(int foo)
+    {
+        while (true)
+        {
+        }
+    }
+}
+",
+            };
         }
 
         [Theory]
