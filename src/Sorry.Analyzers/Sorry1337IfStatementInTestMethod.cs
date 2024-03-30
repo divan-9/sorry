@@ -27,7 +27,7 @@
             category: "Testing",
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
-            description: (LocalizableString)"Test contains `if` statement.");
+            description: "Test contains `if` statement.");
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } =
             ImmutableArray.Create(item: Rule);
