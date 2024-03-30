@@ -6,6 +6,6 @@ namespace Sorry.Analyzers
 
         internal const string Sorry2000 = "SORRY2000";
 
-        internal const string Sorry1337 = "SORRY1337";
+        internal const string Sorry3000 = "SORRY3000";
     }
 }

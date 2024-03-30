@@ -9,7 +9,7 @@
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(firstLanguage: LanguageNames.CSharp)]
-    public class Sorry1337IfStatementInTestMethod : DiagnosticAnalyzer
+    public class Sorry3000TestShouldNotContainIfStatement : DiagnosticAnalyzer
     {
         private static readonly HashSet<string> TestAttributeNames =
             new HashSet<string>
@@ -21,7 +21,7 @@
             };
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
-            id: DiagnosticIds.Sorry1337,
+            id: DiagnosticIds.Sorry3000,
             title: "Tests should not contain `if` statements",
             messageFormat: "Test '{0}' contains `if` statement",
             category: "Testing",
