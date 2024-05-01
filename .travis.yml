@@ -1,6 +1,0 @@
-language: csharp
-dotnet: 5.0
-mono: none
-
-script:
-  - dotnet test && ./nuget-push.sh

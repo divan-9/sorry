@@ -1,0 +1,16 @@
+name: test & nuget
+on: [push]
+jobs:
+  test-and-publish:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+      - run: pwd && ls
+      - run: dotnet test
+      - run: ./nuget-push.sh ${{ github.ref_name }}
+        env:
+          NUGET_KEY: ${{ secrets.NUGET_KEY }}
