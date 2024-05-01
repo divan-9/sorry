@@ -1,11 +1,11 @@
 name: test & nuget
 on: [push]
 jobs:
-  test-and-nuget:
+  test-and-publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup dotnet 8.0
-        uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.x
       - run: pwd && ls
