@@ -1,5 +1,5 @@
 
-PACKAGE_VERSION="$TRAVIS_TAG"
+PACKAGE_VERSION="$1"
 
 if [[ $PACKAGE_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+.*$ ]]; then
     dotnet pack -c Release -p:PackageVersion=$PACKAGE_VERSION
