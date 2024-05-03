@@ -12,7 +12,7 @@ namespace Sorry.Analyzers.Tests
         protected override string LanguageName => LanguageNames.CSharp;
 
         [Fact]
-        public void WarnsWrongNamespace()
+        public void WarnsWrongBlockNamespace()
         {
             const string code = @"
             namespace X
@@ -32,7 +32,26 @@ namespace Sorry.Analyzers.Tests
         }
 
         [Fact]
-        public void DoesNotWarnCorrectNamespace()
+        public void WarnsWrongFileNamespace()
+        {
+            const string code = @"
+            namespace X;
+
+            class A
+            {
+                void Method(string arg1)
+                {
+                }
+            }
+            ";
+
+            var document = GetDocumentFromCode(code, "/Y/TestDocument");
+            var locator = new TextSpan(23, 1);
+            this.HasDiagnostic(document, DiagnosticIds.Sorry2000, locator);
+        }
+
+        [Fact]
+        public void DoesNotWarnCorrectBlockNamespace()
         {
             const string code = @"
             namespace X
@@ -42,6 +61,23 @@ namespace Sorry.Analyzers.Tests
                     void Method(string arg1)
                     {
                     }
+                }
+            }
+            ";
+
+            var document = GetDocumentFromCode(code, "/X/TestDocument");
+            this.NoDiagnostic(document, DiagnosticIds.Sorry2000);
+        }
+
+        [Fact]
+        public void DoesNotWarnCorrectFileNamespace()
+        {
+            const string code = @"
+            namespace X;
+            class A
+            {
+                void Method(string arg1)
+                {
                 }
             }
             ";

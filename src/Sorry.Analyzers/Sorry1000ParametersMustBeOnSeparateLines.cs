@@ -16,7 +16,7 @@
             category: "Readability Rules",
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
-            description: "Parameters must be on separate lines",
+            description: "Parameters must be on separate lines.",
             helpLinkUri: "TODO:");
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }

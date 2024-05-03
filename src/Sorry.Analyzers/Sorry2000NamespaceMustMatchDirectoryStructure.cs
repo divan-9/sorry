@@ -15,11 +15,11 @@
         private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             id: DiagnosticIds.Sorry2000,
             title: "Namespace must match directory structure",
-            messageFormat: "Namespace {0} must match directory structure. Expected {1}",
+            messageFormat: "Namespace {0} must match directory structure. Expected {1}.",
             category: "Namespace Rules",
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
-            description: "It's a good practice to keep namespace and file structure in sync",
+            description: "It's a good practice to keep namespace and file structure in sync.",
             helpLinkUri: "TODO:");
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
@@ -31,12 +31,13 @@
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
             context.RegisterSyntaxNodeAction(NamespaceNodeAction, SyntaxKind.NamespaceDeclaration);
+            context.RegisterSyntaxNodeAction(NamespaceNodeAction, SyntaxKind.FileScopedNamespaceDeclaration);
         }
 
         private static void NamespaceNodeAction(
             SyntaxNodeAnalysisContext context)
         {
-            var namespaceDeclaration = (NamespaceDeclarationSyntax)context.Node;
+            var namespaceDeclaration = (BaseNamespaceDeclarationSyntax)context.Node;
             var namespaceName = namespaceDeclaration.Name.GetText().ToString().Trim();
 
             var expectedNamespaceName = GetExpectedNamespace(
