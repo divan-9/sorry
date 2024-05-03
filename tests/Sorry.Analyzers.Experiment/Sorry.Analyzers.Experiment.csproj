@@ -7,7 +7,6 @@
   <PropertyGroup>
     <GenerateFullPaths>true</GenerateFullPaths>
     <LangVersion>latest</LangVersion>
-    <CodeAnalysisRuleSet>../../Analyzers.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
