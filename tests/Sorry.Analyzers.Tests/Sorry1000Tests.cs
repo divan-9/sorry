@@ -1,16 +1,15 @@
 ﻿namespace Sorry.Analyzers.Tests
 {
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Diagnostics;
-    using RoslynTestKit;
+    using System.Threading.Tasks;
+    using Microsoft.CodeAnalysis.CSharp.Testing;
+    using Microsoft.CodeAnalysis.Testing;
+    using Microsoft.CodeAnalysis.Testing.Verifiers;
     using Xunit;
 
-    public class Sorry1000Tests : AnalyzerTestFixture
+    public class Sorry1000Tests
     {
-        protected override string LanguageName => LanguageNames.CSharp;
-
         [Fact]
-        public void WarnsSingleArgument()
+        public async Task WarnsSingleArgument()
         {
             const string code = @"
                 class A
@@ -21,11 +20,17 @@
                 }
             ";
 
-            this.HasDiagnostic(code, DiagnosticIds.Sorry1000);
+            var sut = new CSharpAnalyzerTest<Sorry1000ParametersMustBeOnSeparateLines, XUnitVerifier>
+            {
+                TestCode = code,
+                CompilerDiagnostics = CompilerDiagnostics.None,
+            };
+
+            await sut.RunAsync().ConfigureAwait(false);
         }
 
         [Fact]
-        public void WarnsArgumentsOnSameLine()
+        public async Task WarnsArgumentsOnSameLine()
         {
             const string code = @"
                 class A
@@ -37,11 +42,17 @@
                 }
             ";
 
-            this.HasDiagnostic(code, DiagnosticIds.Sorry1000);
+            var sut = new CSharpAnalyzerTest<Sorry1000ParametersMustBeOnSeparateLines, XUnitVerifier>
+            {
+                TestCode = code,
+                CompilerDiagnostics = CompilerDiagnostics.None,
+            };
+
+            await sut.RunAsync().ConfigureAwait(false);
         }
 
         [Fact]
-        public void DoesNotWarnCorrectlyFormattedArguments()
+        public async Task DoesNotWarnCorrectlyFormattedArguments()
         {
             const string code = @"
                 class A
@@ -54,11 +65,19 @@
                 }
             ";
 
-            this.NoDiagnostic(code, DiagnosticIds.Sorry1000);
+            var sut = new CSharpAnalyzerTest<Sorry1000ParametersMustBeOnSeparateLines, XUnitVerifier>
+            {
+                TestCode = code,
+                CompilerDiagnostics = CompilerDiagnostics.None,
+            };
+
+            sut.ExpectedDiagnostics.Clear();
+
+            await sut.RunAsync().ConfigureAwait(false);
         }
 
         [Fact]
-        public void DoesNotWarnEmptyArgumentList()
+        public async Task DoesNotWarnEmptyArgumentList()
         {
             const string code = @"
                 class A
@@ -69,12 +88,15 @@
                 }
             ";
 
-            this.NoDiagnostic(code, "AD0001");
-        }
+            var sut = new CSharpAnalyzerTest<Sorry1000ParametersMustBeOnSeparateLines, XUnitVerifier>
+            {
+                TestCode = code,
+                CompilerDiagnostics = CompilerDiagnostics.None,
+            };
 
-        protected override DiagnosticAnalyzer CreateAnalyzer()
-        {
-            return new Sorry1000ParametersMustBeOnSeparateLines();
+            sut.ExpectedDiagnostics.Clear();
+
+            await sut.RunAsync().ConfigureAwait(false);
         }
     }
 }
