@@ -1,15 +1,15 @@
 ﻿namespace Sorry.Analyzers.Tests
 {
     using System.Collections.Generic;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Diagnostics;
-    using RoslynTestKit;
+    using System.Threading.Tasks;
+    using Microsoft.CodeAnalysis.CSharp.Testing;
+    using Microsoft.CodeAnalysis.Testing;
+    using Microsoft.CodeAnalysis.Testing.Verifiers;
     using Xunit;
+    using Verifier = Microsoft.CodeAnalysis.CSharp.Testing.XUnit.AnalyzerVerifier<Sorry.Analyzers.Sorry3000TestShouldNotContainIfStatement>;
 
-    public class Sorry3000Tests : AnalyzerTestFixture
+    public class Sorry3000Tests
     {
-        protected override string LanguageName => LanguageNames.CSharp;
-
         public static IEnumerable<object[]> MarkupCodeSamplesForTestsWithIfStatement()
         {
             yield return new object[]
@@ -227,27 +227,40 @@ public class Foo
 
         [Theory]
         [MemberData(nameof(MarkupCodeSamplesForTestsWithIfStatement))]
-        public void WarnsTestContainsIfStatement(
+        public async Task WarnsTestContainsIfStatementAsync(
             string markupCode)
         {
-            this.HasDiagnostic(
-                markupCode: markupCode,
-                diagnosticId: DiagnosticIds.Sorry3000);
+            var code = markupCode.Replace("[|", string.Empty).Replace("|]", string.Empty);
+
+            var expected = Verifier.Diagnostic()
+                .WithSpan(startLine: 11, startColumn: 9, endLine: 13, endColumn: 10)
+                .WithMessage("Test 'MyTestMethod' contains `if` statement");
+
+            var sut = new CSharpAnalyzerTest<Sorry3000TestShouldNotContainIfStatement, XUnitVerifier>
+            {
+                TestCode = code,
+                CompilerDiagnostics = CompilerDiagnostics.None,
+            };
+
+            sut.ExpectedDiagnostics.Add(expected);
+
+            await sut.RunAsync().ConfigureAwait(false);
         }
 
         [Theory]
         [MemberData(nameof(CodeSamplesForTestsWithoutIfStatement))]
-        public void DoesNotWarnTestWithoutIfStatement(
+        public async Task DoesNotWarnTestWithoutIfStatementAsync(
             string code)
         {
-            this.NoDiagnostic(
-                code: code,
-                diagnosticId: DiagnosticIds.Sorry3000);
-        }
+            var sut = new CSharpAnalyzerTest<Sorry3000TestShouldNotContainIfStatement, XUnitVerifier>
+            {
+                TestCode = code,
+                CompilerDiagnostics = CompilerDiagnostics.None,
+            };
 
-        protected override DiagnosticAnalyzer CreateAnalyzer()
-        {
-            return new Sorry3000TestShouldNotContainIfStatement();
+            sut.ExpectedDiagnostics.Clear();
+
+            await sut.RunAsync().ConfigureAwait(false);
         }
     }
 }

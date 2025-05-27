@@ -1,18 +1,16 @@
 namespace Sorry.Analyzers.Tests
 {
-    using System.Collections.Immutable;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Diagnostics;
-    using Microsoft.CodeAnalysis.Text;
-    using RoslynTestKit;
+    using System.Threading.Tasks;
+    using Microsoft.CodeAnalysis.CSharp.Testing;
+    using Microsoft.CodeAnalysis.Testing;
+    using Microsoft.CodeAnalysis.Testing.Verifiers;
     using Xunit;
+    using Verifier = Microsoft.CodeAnalysis.CSharp.Testing.XUnit.AnalyzerVerifier<Sorry.Analyzers.Sorry2000NamespaceMustMatchDirectoryStructure>;
 
-    public class Sorry2000Tests : AnalyzerTestFixture
+    public class Sorry2000Tests
     {
-        protected override string LanguageName => LanguageNames.CSharp;
-
         [Fact]
-        public void WarnsWrongBlockNamespace()
+        public async Task WarnsWrongBlockNamespace()
         {
             const string code = @"
             namespace X
@@ -26,13 +24,23 @@ namespace Sorry.Analyzers.Tests
             }
             ";
 
-            var document = GetDocumentFromCode(code, "/Y/TestDocument");
-            var locator = new TextSpan(23, 1);
-            this.HasDiagnostic(document, DiagnosticIds.Sorry2000, locator);
+            var expected = Verifier.Diagnostic()
+                .WithSpan(startLine: 2, startColumn: 13, endLine: 10, endColumn: 14)
+                .WithMessage($"Namespace X must match directory structure. Expected 0.");
+
+            var sut = new CSharpAnalyzerTest<Sorry2000NamespaceMustMatchDirectoryStructure, XUnitVerifier>
+            {
+                TestCode = code,
+                CompilerDiagnostics = CompilerDiagnostics.None,
+            };
+
+            sut.ExpectedDiagnostics.Add(expected);
+
+            await sut.RunAsync().ConfigureAwait(false);
         }
 
         [Fact]
-        public void WarnsWrongFileNamespace()
+        public async Task WarnsWrongFileNamespace()
         {
             const string code = @"
             namespace X;
@@ -45,16 +53,31 @@ namespace Sorry.Analyzers.Tests
             }
             ";
 
-            var document = GetDocumentFromCode(code, "/Y/TestDocument");
-            var locator = new TextSpan(23, 1);
-            this.HasDiagnostic(document, DiagnosticIds.Sorry2000, locator);
+            var expected = Verifier.Diagnostic()
+                .WithLocation("/Y/TestDocument", 2, 13)
+                .WithMessage($"Namespace X must match directory structure. Expected Y.");
+
+            var sut = new CSharpAnalyzerTest<Sorry2000NamespaceMustMatchDirectoryStructure, XUnitVerifier>
+            {
+                CompilerDiagnostics = CompilerDiagnostics.None,
+                TestState =
+                {
+                    Sources =
+                    {
+                        ("/Y/TestDocument", code),
+                    },
+                    ExpectedDiagnostics = { expected, },
+                },
+            };
+
+            await sut.RunAsync().ConfigureAwait(false);
         }
 
         [Fact]
-        public void DoesNotWarnCorrectBlockNamespace()
+        public async Task DoesNotWarnCorrectBlockNamespace()
         {
             const string code = @"
-            namespace X
+            namespace X;
             {
                 class A
                 {
@@ -65,42 +88,20 @@ namespace Sorry.Analyzers.Tests
             }
             ";
 
-            var document = GetDocumentFromCode(code, "/X/TestDocument");
-            this.NoDiagnostic(document, DiagnosticIds.Sorry2000);
-        }
-
-        [Fact]
-        public void DoesNotWarnCorrectFileNamespace()
-        {
-            const string code = @"
-            namespace X;
-            class A
+            var sut = new CSharpAnalyzerTest<Sorry2000NamespaceMustMatchDirectoryStructure, XUnitVerifier>
             {
-                void Method(string arg1)
+                CompilerDiagnostics = CompilerDiagnostics.None,
+                TestState =
                 {
-                }
-            }
-            ";
+                    Sources =
+                    {
+                        ("/X/TestDocument", code),
+                    },
+                    ExpectedDiagnostics = { },
+                },
+            };
 
-            var document = GetDocumentFromCode(code, "/X/TestDocument");
-            this.NoDiagnostic(document, DiagnosticIds.Sorry2000);
-        }
-
-        protected override DiagnosticAnalyzer CreateAnalyzer()
-        {
-            return new Sorry2000NamespaceMustMatchDirectoryStructure();
-        }
-
-        private static Document GetDocumentFromCode(
-            string code,
-            string fileName)
-        {
-            var immutableReferencesBuilder = ImmutableArray.CreateBuilder<MetadataReference>();
-
-            return new AdhocWorkspace()
-                .AddProject("TestProject", LanguageNames.CSharp)
-                .AddMetadataReferences(immutableReferencesBuilder.ToImmutable())
-                .AddDocument(fileName, code);
+            await sut.RunAsync().ConfigureAwait(false);
         }
     }
 }
