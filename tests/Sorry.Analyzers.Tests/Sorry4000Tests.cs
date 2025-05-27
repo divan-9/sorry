@@ -8,13 +8,9 @@ namespace Sorry.Analyzers.Tests
     using Verifier = Microsoft.CodeAnalysis.CSharp.Testing.XUnit.AnalyzerVerifier<
        Sorry.Analyzers.Sorry4000DenyPrimaryConstructorAnalyzer>;
 
-    [Trait(Spec.Trait, Spec.SP1879.UserVoice1)]
-    [Trait(Spec.Trait, Spec.SP1879.UserVoice2)]
-    [Trait(Spec.Trait, Spec.SP1879.UserVoice3)]
     public class Sorry4000Tests
     {
         [Fact]
-        [Trait(Spec.Trait, Spec.SP1879.R1)]
         public async Task T1()
         {
             var code = """
@@ -40,7 +36,6 @@ namespace Sorry.Analyzers.Tests
         }
 
         [Fact]
-        [Trait(Spec.Trait, Spec.SP1879.R2)]
         public async Task T2()
         {
             var code = """
